@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import '../../../constants.dart';
+import 'package:health_app/constants.dart';
 
-
-
-
-class ItemCard extends StatelessWidget {
-  const ItemCard({
-    @required this.repo,
+class MedCard extends StatelessWidget {
+  const MedCard({
     Key key,
   }) : super(key: key);
 
-  final String repo;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -52,7 +47,7 @@ class ItemCard extends StatelessWidget {
               ),
               height: 160,
               width: 200,
-              child: SvgPicture.asset(repo),
+              child: SvgPicture.asset('assets/svgs/Medicine.svg'),
             ),
           ),
           //Steps
@@ -71,9 +66,13 @@ class ItemCard extends StatelessWidget {
                       horizontal: 10,
                       vertical: 5,
                     ),
+                    //PUB DEV PEDOMETER
                     child: Text(
-                      'Daily steps: 5000/6000 completed',
-                      style: Theme.of(context).textTheme.button,
+                      'Get notified to take prescription',
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                   Spacer(),

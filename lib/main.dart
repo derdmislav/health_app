@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'src/screens/overview/overview_screen.dart';
-import './src/constants.dart';
+import './screens/overview/overview_screen.dart';
+import './constants.dart';
 
 void main() {
   runApp(MyApp());

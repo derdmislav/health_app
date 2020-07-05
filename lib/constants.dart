@@ -6,6 +6,6 @@ const kDefaultShadow=BoxShadow(
     color: Colors.black26,
   );
 
-const kPrimaryColor=Color(0xFF1F47B3);
+const kPrimaryColor=Color(0xFF035aa6);
 const kAccentColor=Color(0xFF5787FF);
-const kBackgroundColor=Color(0xFFfbfbfb);
+const kBackgroundColor=Color(0xFFf1f2f4);
