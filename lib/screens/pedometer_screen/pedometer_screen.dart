@@ -40,5 +40,16 @@ AppBar _buildAppBar(BuildContext context) {
         color: Colors.black87,
       ),
     ),
+    actions: <Widget>[
+      IconButton(
+        padding: EdgeInsets.only(right: 30),
+        icon: Icon(
+          Icons.add,
+          color: Colors.black87,
+          size: 35,
+        ),
+        onPressed: () {},
+      ),
+    ],
   );
 }

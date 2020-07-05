@@ -35,7 +35,7 @@ class MedBodyWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
 
-                  // KORACI U DANU
+                  // Report card
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -80,25 +80,47 @@ class MedBodyWidget extends StatelessWidget {
                 //BACKEND medication HISTORY needed
                 Column(
                   children: <Widget>[
-                    ListTile(
+                    ExpansionTile(
                       leading: SvgPicture.asset(
                         'assets/icons/capsule-f.svg',
                         color: Colors.black87,
                         height: size.width * 0.10,
                       ),
                       title: Text('FRIDAY'),
-                      subtitle: Text('6000 steps'),
-                      trailing: Text('280 kcal'),
-                    ),
-                    ListTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/capsule-f.svg',
-                        color: Colors.black87,
-                        height: size.width * 0.10,
+                      subtitle: Text('2 medication'),
+                      trailing: Icon(
+                        Icons.check,
+                        color: Colors.green.shade600,
+                        size: 33,
                       ),
-                      title: Text('SATURDAY'),
-                      subtitle: Text('5500 steps'),
-                      trailing: Text('250 kcal'),
+                      children: <Widget>[
+                        ListTile(
+                          leading: SvgPicture.asset(
+                            'assets/icons/capsule-f.svg',
+                            color: Colors.black87,
+                            height: size.width * 0.10,
+                          ),
+                          title: Text('Loratadine 10mg'),
+                          trailing: Icon(
+                            Icons.check,
+                            color: Colors.green.shade600,
+                            size: 25,
+                          ),
+                        ),
+                        ListTile(
+                          leading: SvgPicture.asset(
+                            'assets/icons/capsule-f.svg',
+                            color: Colors.black87,
+                            height: size.width * 0.10,
+                          ),
+                          title: Text('Benadryl 25mg'),
+                          trailing: Icon(
+                            Icons.check,
+                            color: Colors.green.shade600,
+                            size: 25,
+                          ),
+                        ),
+                      ],
                     ),
                     ListTile(
                       leading: SvgPicture.asset(
@@ -107,6 +129,7 @@ class MedBodyWidget extends StatelessWidget {
                         height: size.width * 0.10,
                       ),
                       title: Text('SUNDAY'),
+                      subtitle: Text('0 med'),
                       trailing: Icon(
                         Icons.check,
                         color: Colors.green.shade600,

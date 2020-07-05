@@ -4,9 +4,6 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:health_app/constants.dart';
 
-
-
-
 class StepsCard extends StatelessWidget {
   const StepsCard({
     Key key,
@@ -70,8 +67,11 @@ class StepsCard extends StatelessWidget {
                       vertical: 5,
                     ),
                     child: Text(
-                      'Daily steps: 5000/6000 completed',
-                      style: Theme.of(context).textTheme.button,
+                      '5000/6000 steps completed',
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                   Spacer(),
