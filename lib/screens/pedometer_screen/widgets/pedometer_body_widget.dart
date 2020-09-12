@@ -21,11 +21,19 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
   Stream<PedestrianStatus> _pedestrianStatusStream;
   Stream<StepCount> _stepCountStream;
   String _status = '?', _steps = '?';
+  StepCountData _stepCountData;
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_stepCountData == null)
+      _stepCountData = Provider.of<StepCountData>(context);
   }
 
   void onStepCount(StepCount event) {
@@ -70,10 +78,12 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
   }
 
   void updateSteps(context) {
-    if (Provider.of<StepCountData>(context).stepLength == 0) {
+    if (_stepCountData.stepLength == 0) {
       var stepCount = STEPCOUNT.StepCount(
-          dateTime: DateTime.now(), steps: int.parse(_steps));
-      Provider.of<StepCountData>(context).addSteps(stepCount);
+        dateTime: DateTime.now(),
+        steps: int.tryParse(_steps) ?? 0,
+      );
+      _stepCountData.addSteps(stepCount);
     }
   }
 
@@ -163,7 +173,7 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
                     itemBuilder: (context, index) {
                       return StepCountTile(tileIndex: index);
                     },
-                    itemCount: Provider.of<StepCountData>(context).stepLength,
+                    itemCount: _stepCountData.stepLength,
                   ),
                 ),
               ],
