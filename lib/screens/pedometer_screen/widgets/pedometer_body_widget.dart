@@ -41,6 +41,7 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
     setState(() {
       _steps = event.steps.toString();
     });
+    updateSteps(context);
   }
 
   void onPedestrianStatusChanged(PedestrianStatus event) {
@@ -72,7 +73,7 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
         .onError(onPedestrianStatusError);
 
     _stepCountStream = Pedometer.stepCountStream;
-    _stepCountStream.listen(onStepCount).onError(onStepCountError);
+    _stepCountStream.listen(onStepCount, onError: onStepCountError);
 
     if (!mounted) return;
   }
@@ -89,7 +90,6 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    updateSteps(context);
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
