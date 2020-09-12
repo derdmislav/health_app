@@ -2,17 +2,87 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:health_app/constants.dart';
+import 'package:health_app/models/step_count_data.dart';
+import 'package:health_app/screens/pedometer_screen/widgets/step_count_tile_widget.dart';
+import 'package:health_app/models/step_count.dart' as STEPCOUNT;
+import 'package:pedometer/pedometer.dart';
+import 'package:provider/provider.dart';
 
-class PedometerBodyWidget extends StatelessWidget {
+class PedometerBodyWidget extends StatefulWidget {
   const PedometerBodyWidget({
     Key key,
   }) : super(key: key);
 
   @override
+  _PedometerBodyWidgetState createState() => _PedometerBodyWidgetState();
+}
+
+class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
+  Stream<PedestrianStatus> _pedestrianStatusStream;
+  Stream<StepCount> _stepCountStream;
+  String _status = '?', _steps = '?';
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  void onStepCount(StepCount event) {
+    print(event);
+    setState(() {
+      _steps = event.steps.toString();
+    });
+  }
+
+  void onPedestrianStatusChanged(PedestrianStatus event) {
+    print(event);
+    setState(() {
+      _status = event.status;
+    });
+  }
+
+  void onPedestrianStatusError(error) {
+    print('onPedestrianStatusError: $error');
+    setState(() {
+      _status = 'Pedestrian Status not available';
+    });
+    print(_status);
+  }
+
+  void onStepCountError(error) {
+    print('onStepCountError: $error');
+    setState(() {
+      _steps = 'Step Count not available';
+    });
+  }
+
+  void initPlatformState() {
+    _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
+    _pedestrianStatusStream
+        .listen(onPedestrianStatusChanged)
+        .onError(onPedestrianStatusError);
+
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen(onStepCount).onError(onStepCountError);
+
+    if (!mounted) return;
+  }
+
+  void updateSteps(context) {
+    if (Provider.of<StepCountData>(context).stepLength == 0) {
+      var stepCount = STEPCOUNT.StepCount(
+          dateTime: DateTime.now(), steps: int.parse(_steps));
+      Provider.of<StepCountData>(context).addSteps(stepCount);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    updateSteps(context);
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
-          child: Column(
+      child: Column(
         children: <Widget>[
           Container(
             width: double.infinity,
@@ -45,7 +115,7 @@ class PedometerBodyWidget extends StatelessWidget {
                         height: size.width * 0.10,
                       ),
                       Text(
-                        '5000/6000',
+                        _steps,
                         style: TextStyle(color: Colors.white, fontSize: 17),
                       ),
                       Text(
@@ -86,49 +156,15 @@ class PedometerBodyWidget extends StatelessWidget {
                 ),
 
                 //BACKEND STEPS HISTORY needed
-                Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/bx-walk',
-                        color: Colors.black87,
-                        height: size.width * 0.10,
-                      ),
-                      title: Text('FRIDAY'),
-                      subtitle: Text('6000 steps'),
-                      trailing: Text('280 kcal'),
-                    ),
-                    ListTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/bx-walk',
-                        color: Colors.black87,
-                        height: size.width * 0.10,
-                      ),
-                      title: Text('SATURDAY'),
-                      subtitle: Text('5500 steps'),
-                      trailing: Text('250 kcal'),
-                    ),
-                    ListTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/bx-walk',
-                        color: Colors.black87,
-                        height: size.width * 0.10,
-                      ),
-                      title: Text('SUNDAY'),
-                      subtitle: Text('5500 steps'),
-                      trailing: Text('250 kcal'),
-                    ),
-                    ListTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/bx-walk',
-                        color: Colors.black87,
-                        height: size.width * 0.10,
-                      ),
-                      title: Text('SUNDAY'),
-                      subtitle: Text('5500 steps'),
-                      trailing: Text('250 kcal'),
-                    ),
-                  ],
+
+                Container(
+                  height: size.height * 0.35,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return StepCountTile(tileIndex: index);
+                    },
+                    itemCount: Provider.of<StepCountData>(context).stepLength,
+                  ),
                 ),
               ],
             ),

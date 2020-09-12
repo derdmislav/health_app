@@ -33,11 +33,13 @@ class _FoodScreenState extends State<FoodScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.add,
+              Icons.fastfood,
               color: Colors.black87,
-              size: 35,
+              size: 32,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/AddFoodScreen');
+            },
           ),
         ],
       ),
