@@ -18,71 +18,34 @@ class PedometerBodyWidget extends StatefulWidget {
 }
 
 class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
-  Stream<PedestrianStatus> _pedestrianStatusStream;
   Stream<StepCount> _stepCountStream;
-  String _status = '?', _steps = '?';
   StepCountData _stepCountData;
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
+  bool initialized = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_stepCountData == null)
       _stepCountData = Provider.of<StepCountData>(context);
+
+    if (!initialized) initPlatformState();
   }
 
-  void onStepCount(StepCount event) {
-    print(event);
-    setState(() {
-      _steps = event.steps.toString();
-    });
-    updateSteps(context);
-  }
-
-  void onPedestrianStatusChanged(PedestrianStatus event) {
-    print(event);
-    setState(() {
-      _status = event.status;
-    });
-  }
-
-  void onPedestrianStatusError(error) {
-    print('onPedestrianStatusError: $error');
-    setState(() {
-      _status = 'Pedestrian Status not available';
-    });
-    print(_status);
-  }
-
-  void onStepCountError(error) {
-    print('onStepCountError: $error');
-    setState(() {
-      _steps = 'Step Count not available';
-    });
-  }
-
-  void initPlatformState() {
-    _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
-    _pedestrianStatusStream
-        .listen(onPedestrianStatusChanged)
-        .onError(onPedestrianStatusError);
+  Future<void> initPlatformState() async {
+    await _stepCountData.getStepCounts();
 
     _stepCountStream = Pedometer.stepCountStream;
-    _stepCountStream.listen(onStepCount, onError: onStepCountError);
+
+    initialized = true;
 
     if (!mounted) return;
   }
 
-  void updateSteps(context) {
+  void updateSteps(StepCount data) {
     if (_stepCountData.stepLength == 0) {
       var stepCount = STEPCOUNT.StepCount(
         dateTime: DateTime.now(),
-        steps: int.tryParse(_steps) ?? 0,
+        steps: data.steps,
       );
       _stepCountData.addSteps(stepCount);
     }
@@ -116,25 +79,35 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
                   ),
 
                   // KORACI U DANU
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      SvgPicture.asset(
-                        'assets/icons/bx-walk',
-                        color: Colors.white,
-                        height: size.width * 0.10,
-                      ),
-                      Text(
-                        _steps,
-                        style: TextStyle(color: Colors.white, fontSize: 17),
-                      ),
-                      Text(
-                        '250 kcal',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+                  child: StreamBuilder(
+                    stream: _stepCountStream,
+                    builder: (context, AsyncSnapshot<StepCount> snapshot) {
+                      if (snapshot.hasData) {
+                        updateSteps(snapshot.data);
+                      }
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/icons/bx-walk',
+                            color: Colors.white,
+                            height: size.width * 0.10,
+                          ),
+                          Text(
+                            snapshot.hasData && snapshot.data != null
+                                ? snapshot.data.steps.toString()
+                                : "?",
+                            style: TextStyle(color: Colors.white, fontSize: 17),
+                          ),
+                          Text(
+                            '250 kcal',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
 
@@ -169,11 +142,20 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
 
                 Container(
                   height: size.height * 0.35,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return StepCountTile(tileIndex: index);
+                  child: StreamBuilder(
+                    stream: _stepCountStream,
+                    initialData: null,
+                    builder: (context, AsyncSnapshot<StepCount> snapshot) {
+                      if (snapshot.hasData && snapshot.data != null)
+                        return ListView.builder(
+                          itemBuilder: (context, index) {
+                            return StepCountTile(tileIndex: index);
+                          },
+                          itemCount: _stepCountData.stepLength,
+                        );
+                      else
+                        return Text("No data :(");
                     },
-                    itemCount: _stepCountData.stepLength,
                   ),
                 ),
               ],

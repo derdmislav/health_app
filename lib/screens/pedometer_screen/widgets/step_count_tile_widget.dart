@@ -15,7 +15,6 @@ class StepCountTile extends StatelessWidget {
     return Consumer<StepCountData>(
       builder: (context, stepCountData, child) {
         StepCount stepCount = stepCountData.getStepCount(tileIndex);
-        print(stepCount.steps);
         return ListTile(
           leading: SvgPicture.asset(
             'assets/icons/bx-walk',
