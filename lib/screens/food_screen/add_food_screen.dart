@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:health_app/models/food.dart';
+import 'package:health_app/resources/health_app_api.dart';
 import 'package:provider/provider.dart';
-
 
 class AddFoodScreen extends StatefulWidget {
   @override
@@ -9,20 +10,30 @@ class AddFoodScreen extends StatefulWidget {
 
 class _AddFoodScreenState extends State<AddFoodScreen> {
   String ingredient;
+  List<Food> foods = List<Food>();
+  bool isLoading = false;
 
-
-  void _addContact(context) {
+  void _addContact(context) async {
     /// Validate the client name input
     if (ingredient == null) {
       // commonToast("You must include a name.");
       return;
+    } else {
+      setState(() {
+        isLoading = true;
+      });
+      List<Food> result = await HealthAppApi().searchFood(ingredient);
+      setState(() {
+        isLoading = false;
+        foods = result;
+      });
     }
-    
+
     /// Save contact data, email and phone are optional - null values replaced by empty string
     // Provider.of<ContactsData>(context, listen: false).addContact(
-      
+
     // );
-    Navigator.pop(context);
+    //Navigator.pop(context);
   }
 
   @override
@@ -63,6 +74,20 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     ingredient = nameIngredient;
                   });
                 },
+              ),
+              Expanded(
+                child: isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        itemCount: foods.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            leading: Text(foods[index].id.toString()),
+                            title: Text("Test"),
+                            subtitle: Text(foods[index].description),
+                          );
+                        },
+                      ),
               ),
             ],
           ),
