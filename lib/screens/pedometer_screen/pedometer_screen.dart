@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:health_app/constants.dart';
-import 'package:health_app/models/step_count_data.dart';
 import 'package:health_app/screens/pedometer_screen/widgets/add_goal_pedometer_widget.dart';
 
 import 'package:health_app/screens/pedometer_screen/widgets/pedometer_body_widget.dart';
-import 'package:provider/provider.dart';
 
 class PedometerScreen extends StatefulWidget {
   @override
@@ -15,7 +13,6 @@ class PedometerScreen extends StatefulWidget {
 class _PedometerScreenState extends State<PedometerScreen> {
   @override
   Widget build(BuildContext context) {
-    Provider.of<StepCountData>(context, listen: false).getStepCounts();
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: _buildAppBar(context),

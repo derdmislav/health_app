@@ -10,7 +10,7 @@ class StepCountData extends ChangeNotifier {
 
   StepCount _activeSteps;
 
-  void getStepCounts() async {
+  Future<void> getStepCounts() async {
     var box = await Hive.openBox<StepCount>(_boxName);
 
     _stepCounts = box.values.toList();
@@ -21,9 +21,7 @@ class StepCountData extends ChangeNotifier {
     return _stepCounts[index];
   }
 
-  int get stepLength {
-    return _stepCounts.length;
-  }
+  int get stepLength => _stepCounts.length;
 
   void addSteps(StepCount newStepCount) async {
     var box = await Hive.openBox<StepCount>(_boxName);

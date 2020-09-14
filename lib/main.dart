@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:health_app/models/step_count.dart';
 import 'package:health_app/models/step_count_data.dart';
 import 'package:health_app/screens/food_screen/add_food_screen.dart';
+import 'package:health_app/screens/med_screen/add_medicine_screen.dart';
 import 'package:health_app/screens/overview/overview_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -87,6 +88,7 @@ class MyApp extends StatelessWidget {
                 },
               ),
           '/AddFoodScreen': (context) => AddFoodScreen(),
+          '/AddMedicineScreen': (context) => AddMedicineScreen(),
         },
       ),
     );

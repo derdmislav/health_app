@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:health_app/constants.dart';
-import 'package:health_app/screens/med_screen/widgets/add_medicine_widget.dart';
 import 'package:health_app/screens/med_screen/widgets/med_body_widget.dart';
 
 class MedScreen extends StatefulWidget {
@@ -49,10 +48,7 @@ AppBar _buildAppBar(BuildContext context) {
           size: 35,
         ),
         onPressed: () {
-          showDialog(
-            context: context,
-            child: AddMedicineWidget(),
-          );
+          Navigator.pushNamed(context, '/AddMedicineScreen');
         },
       ),
     ],
