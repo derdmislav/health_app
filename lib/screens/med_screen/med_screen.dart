@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:health_app/constants.dart';
 import 'package:health_app/screens/med_screen/widgets/med_body_widget.dart';
+import 'package:health_app/models/medicine_data.dart';
+import 'package:provider/provider.dart';
 
 class MedScreen extends StatefulWidget {
   @override
@@ -20,6 +22,7 @@ class _MedScreenState extends State<MedScreen> {
 }
 
 AppBar _buildAppBar(BuildContext context) {
+  Provider.of<MedicineData>(context, listen: false).getMedicineList();
   return AppBar(
     backgroundColor: kBackgroundColor,
     elevation: 0,

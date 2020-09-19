@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:health_app/constants.dart';
 
+import 'package:health_app/models/medicine_data.dart';
+import 'package:health_app/screens/med_screen/widgets/medicine_tile.dart';
+import 'package:provider/provider.dart';
+
 class MedBodyWidget extends StatelessWidget {
   const MedBodyWidget({
     Key key,
@@ -78,65 +82,18 @@ class MedBodyWidget extends StatelessWidget {
                 ),
 
                 //BACKEND medication HISTORY needed
-                Column(
-                  children: <Widget>[
-                    ExpansionTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/capsule-f.svg',
-                        color: Colors.black87,
-                        height: size.width * 0.10,
-                      ),
-                      title: Text('FRIDAY'),
-                      subtitle: Text('2 medication'),
-                      trailing: Icon(
-                        Icons.check,
-                        color: Colors.green.shade600,
-                        size: 33,
-                      ),
-                      children: <Widget>[
-                        ListTile(
-                          leading: SvgPicture.asset(
-                            'assets/icons/capsule-f.svg',
-                            color: Colors.black87,
-                            height: size.width * 0.10,
-                          ),
-                          title: Text('Loratadine 10mg'),
-                          trailing: Icon(
-                            Icons.check,
-                            color: Colors.green.shade600,
-                            size: 25,
-                          ),
-                        ),
-                        ListTile(
-                          leading: SvgPicture.asset(
-                            'assets/icons/capsule-f.svg',
-                            color: Colors.black87,
-                            height: size.width * 0.10,
-                          ),
-                          title: Text('Benadryl 25mg'),
-                          trailing: Icon(
-                            Icons.check,
-                            color: Colors.green.shade600,
-                            size: 25,
-                          ),
-                        ),
-                      ],
+                Expanded(
+                  child: Container(
+                    width: size.width * 0.9,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return MedicineTile(tileIndex: index);
+                      },
+                      itemCount:
+                          Provider.of<MedicineData>(context).medicineListLength,
                     ),
-                    ListTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/capsule-f.svg',
-                        color: Colors.black87,
-                        height: size.width * 0.10,
-                      ),
-                      title: Text('SUNDAY'),
-                      subtitle: Text('0 med'),
-                      trailing: Icon(
-                        Icons.check,
-                        color: Colors.green.shade600,
-                        size: 33,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),

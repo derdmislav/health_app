@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:health_app/models/medicine.dart';
+import 'package:health_app/models/medicine_data.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class AddMedicineScreen extends StatefulWidget {
   @override
@@ -7,12 +11,53 @@ class AddMedicineScreen extends StatefulWidget {
 }
 
 class _AddMedicineScreenState extends State<AddMedicineScreen> {
-  final TextEditingController controller = TextEditingController();
+  final TextEditingController controllerName = TextEditingController();
+  final TextEditingController controllerDose = TextEditingController();
+  String medicationName;
+  String medicationDose = '';
+  DateTime dateTimeMed;
+
+  void _addMedicine(context) {
+    /// Validate the client name input
+    if (medicationName == null) {
+      Fluttertoast.showToast(
+        msg: 'You must include a name.',
+        backgroundColor: Theme.of(context).accentColor,
+      );
+      return;
+    }
+    if (dateTimeMed == null) {
+      Fluttertoast.showToast(
+        msg: 'You must input date.',
+        backgroundColor: Theme.of(context).accentColor,
+      );
+      return;
+    }
+
+    /// Save medicine, dose and datetime
+    Provider.of<MedicineData>(context, listen: false).addMedicine(
+      Medicine(
+        medicine: medicationName,
+        dose: (medicationDose != null) ? medicationDose : '',
+        dateTime: dateTimeMed,
+      ),
+    );
+    Fluttertoast.showToast(
+      msg: 'Medicine added.',
+      backgroundColor: Theme.of(context).accentColor,
+    );
+    Navigator.pop(context);
+  }
 
   @override
   void dispose() {
-    controller.dispose();
+    controllerName.dispose();
+    controllerDose.dispose();
     super.dispose();
+  }
+
+  bool isNull() {
+    return dateTimeMed == null;
   }
 
   @override
@@ -32,7 +77,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
               ),
             ),
             onPressed: () {
-              print('pressed');
+              _addMedicine(context);
             },
           ),
         ],
@@ -46,30 +91,26 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: TextField(
-                  controller: controller,
+                  controller: controllerName,
                   autofocus: true,
                   decoration: InputDecoration(
                     hintText: 'Medication name',
                   ),
-                  //ADDED CONTROLLER FOR DONE BUTTON
-                  //added dispose for controller
-                  onEditingComplete: () {
-                    setState(() {});
+                  onChanged: (value) {
+                    medicationName = value;
                   },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: TextField(
-                  controller: controller,
+                  controller: controllerDose,
                   autofocus: true,
                   decoration: InputDecoration(
                     hintText: 'Dose',
                   ),
-                  //ADDED CONTROLLER FOR DONE BUTTON
-                  //added dispose for controller
-                  onEditingComplete: () {
-                    setState(() {});
+                  onChanged: (value) {
+                    medicationDose = value;
                   },
                 ),
               ),
@@ -89,16 +130,15 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                     ),
                     color: Colors.white,
                     onPressed: () {
-                      DatePicker.showDatePicker(
+                      DatePicker.showDateTimePicker(
                         context,
                         showTitleActions: true,
                         minTime: DateTime.now(),
                         maxTime: null,
-                        onChanged: (date) {
-                          print('change $date');
-                        },
                         onConfirm: (date) {
-                          print('confirm $date');
+                          setState(() {
+                            dateTimeMed = date;
+                          });
                         },
                         currentTime: DateTime.now(),
                         locale: LocaleType.en,
@@ -114,6 +154,18 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
+              isNull()
+                  ? Text(
+                      'No date picked',
+                      style: TextStyle(fontSize: 18),
+                    )
+                  : Text(
+                      dateTimeMed.toString(),
+                      style: TextStyle(fontSize: 18),
+                    ),
             ],
           ),
         ),

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class StepCountTile extends StatelessWidget {
-  final dateFormatter = DateFormat('yyyy-MM-dd');
+  final dateFormatter = DateFormat('dd-MM-yyyy');
   final dayFormatter = DateFormat('EEEE');
   
   final int tileIndex;
@@ -31,7 +31,7 @@ class StepCountTile extends StatelessWidget {
           ),
           title: Text('$day ($formattedDate)'),
           subtitle: Text(stepCount.steps.toString()),
-          trailing: Text('${(stepCount.steps * 0.04).toString()} kcal'),
+          trailing: Text('${(stepCount.steps * 0.04).toStringAsFixed(2)} kcal'),
         );
       },
     );
