@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:health_app/constants.dart';
+import 'package:health_app/models/food.dart';
+import 'package:health_app/models/food_data.dart';
+import 'package:health_app/screens/food_screen/widgets/daily_food_report.dart';
+import 'package:health_app/screens/food_screen/widgets/food_tile.dart';
+import 'package:health_app/screens/food_screen/widgets/splash_effect.dart';
+import 'package:provider/provider.dart';
 
 class FoodBodyWidget extends StatelessWidget {
   const FoodBodyWidget({
@@ -26,36 +32,11 @@ class FoodBodyWidget extends StatelessWidget {
             ),
             child: Column(
               children: <Widget>[
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.only(top: 10),
-                  height: size.width * 0.15,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-
-                  //
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      SvgPicture.asset(
-                        'assets/icons/bx-dish',
-                        color: Colors.white,
-                        height: size.width * 0.10,
-                      ),
-                      Text(
-                        'Report',
-                        style: TextStyle(color: Colors.white, fontSize: 17),
-                      ),
-                      Text(
-                        'More info below',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
+                SplashEffect(
+                  child: _widget(context),
+                  onTap: () {
+                    return DailyFoodReport();
+                  },
                 ),
 
                 //OKVIR I SLIKA
@@ -76,62 +57,34 @@ class FoodBodyWidget extends StatelessWidget {
                     ],
                   ),
                 ),
+                SizedBox(
+                  width: size.width * 0.8,
+                  height: size.height * 0.1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text('Interactive'),
+                      Icon(Icons.touch_app,),
+                      Text('Interactive'),
+                      Icon(Icons.fastfood),
+                    ],
+                  ),
+                ),
 
                 //BACKEND food nutritive values needed
-                Column(
-                  children: <Widget>[
-                    ExpansionTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/bx-dish',
-                        color: Colors.black87,
-                        height: size.width * 0.10,
-                      ),
-                      title: Text('FRIDAY'),
-                      subtitle: Text('5 items'),
-                      trailing: Text('1800 kcal'),
-                      children: <Widget>[
-                        ListTile(
-                          leading: SvgPicture.asset(
-                            'assets/icons/bx-dish',
-                            color: Colors.black87,
-                            height: size.width * 0.08,
-                          ),
-                          title: Text('Pizza slice'),
-                          trailing: Text('350 kcal'),
-                        ),
-                        ListTile(
-                          leading: SvgPicture.asset(
-                            'assets/icons/bx-dish',
-                            color: Colors.black87,
-                            height: size.width * 0.08,
-                          ),
-                          title: Text('Eggs Benedict'),
-                          trailing: Text('300 kcal'),
-                        ),
-                      ],
-                    ),
-                    ExpansionTile(
-                      leading: SvgPicture.asset(
-                        'assets/icons/bx-dish',
-                        color: Colors.black87,
-                        height: size.width * 0.10,
-                      ),
-                      title: Text('THURSDAY'),
-                      subtitle: Text('0 items'),
-                      trailing: Text('0 kcal'),
-                      children: <Widget>[
-                        ListTile(
-                          leading: SvgPicture.asset(
-                            'assets/icons/bx-dish',
-                            color: Colors.black87,
-                            height: size.width * 0.10,
-                          ),
-                          title: Text('Pizza slice'),
-                          trailing: Text('250 kcal'),
-                        ),
-                      ],
-                    ),
-                  ],
+                Container(
+                  height: size.height * 0.45,
+                  width: size.width * 0.9,
+                  alignment: Alignment.center,
+                  child: ListView.builder(
+                    reverse: true,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return FoodTile(tileIndex: index);
+                    },
+                    itemCount: Provider.of<FoodData>(context).foodListLength,
+                  ),
                 ),
               ],
             ),
@@ -140,4 +93,37 @@ class FoodBodyWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _widget(context) {
+  final size = MediaQuery.of(context).size;
+  return Container(
+    width: double.infinity,
+    margin: EdgeInsets.only(top: 10),
+    height: size.width * 0.15,
+    decoration: BoxDecoration(
+      color: Theme.of(context).primaryColor.withOpacity(0.9),
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        SvgPicture.asset(
+          'assets/icons/bx-dish',
+          color: Colors.white,
+          height: size.width * 0.10,
+        ),
+        Text(
+          'Report',
+          style: TextStyle(color: Colors.white, fontSize: 17),
+        ),
+        Text(
+          'More info below',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ],
+    ),
+  );
 }

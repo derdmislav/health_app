@@ -3,6 +3,7 @@ import 'package:health_app/models/food.dart';
 import 'package:health_app/resources/health_app_api.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:health_app/models/food_data.dart';
 
 class AddFoodScreen extends StatefulWidget {
   @override
@@ -16,9 +17,12 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   final TextEditingController controller = TextEditingController();
 
   void _addContact(context) async {
-    /// Validate the client name input
-    if (ingredient == null) {
-      // commonToast("You must include a name.");
+    /// Validate the ingredient name input
+    if (ingredient == null || ingredient.length < 3) {
+      Fluttertoast.showToast(
+        msg: 'You need to type at least 3 letters',
+        backgroundColor: Theme.of(context).accentColor,
+      );
       return;
     } else {
       setState(() {
@@ -30,12 +34,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
         foods = result;
       });
     }
-
-    /// Save contact data, email and phone are optional - null values replaced by empty string
-    // Provider.of<ContactsData>(context, listen: false).addContact(
-
-    // );
-    //Navigator.pop(context);
   }
 
   @override
@@ -84,6 +82,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                   setState(() {
                     ingredient = controller.text;
                     _addContact(context);
+                    FocusScope.of(context).unfocus();
                   });
                 },
                 onChanged: (nameIngredient) {
@@ -95,19 +94,19 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               Expanded(
                 child: isLoading
                     ? Center(child: CircularProgressIndicator())
-                    : ListView.builder(
+                    : ListView.separated(
                         itemCount: foods.length,
+                        separatorBuilder: (context, index) => Divider(
+                          color: Colors.black54,
+                        ),
                         itemBuilder: (context, index) {
                           return ListTile(
+                            onLongPress: () {
+                              _addFood(context, foods[index]);
+                              Navigator.pop(context);
+                            },
                             onTap: () {
-                              Fluttertoast.showToast(
-                                msg: 'Food added to your list',
-                                backgroundColor: Theme.of(context).accentColor,
-                              );
-
-                              print(foods[index].description);
-                              print('energy');
-                              print(foods[index].energy);
+                              _nutritionDialog(context, foods[index]);
                             },
                             leading: IconButton(
                                 icon: Icon(
@@ -128,4 +127,88 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+void _addFood(context, Food food) {
+  /// Save food, and its nutrients
+  ///
+  food.dateTime = DateTime.now();
+  Provider.of<FoodData>(context, listen: false).addFood(food);
+  Fluttertoast.showToast(
+    msg: 'Food added to your list.',
+    backgroundColor: Theme.of(context).accentColor,
+  );
+}
+
+void _nutritionDialog(BuildContext context, Food food) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('${food.description}'),
+          Divider(
+            color: Theme.of(context).accentColor,
+            thickness: 1,
+          ),
+          Text('Količina u 100 g'),
+          Divider(),
+          Text('Kalorije(kcal) ${food.energy}'),
+          Divider(),
+          Text('Masti: ${food.totalLipid} g'),
+          Text('Zasicene ${food.fattyAcidsSat} g'),
+          Text('Nezasicene ${food.fattyAcidsTrans} g'),
+          Divider(),
+          Text('Kolesterol ${food.cholesterol} mg'),
+          Text('Natrij ${food.sodium} mg'),
+          Divider(),
+          Text('Ugljikohidrati ${food.carbohydrate} g'),
+          Text('Od toga šećeri: ${food.sugarsTotal} g'),
+          Text('Od toga dijetna vlakna: ${food.fiber} g'),
+          Divider(),
+          Text('Bjelančevine ${food.protein} g'),
+          Divider(),
+          Text('Kalcij ${food.calcium} mg'),
+          Text('Željezo ${food.iron} mg'),
+          Text('Vitamin A ${food.vitaminA} IU'),
+          Text('Vitamin C ${food.vitaminC} mg'),
+          Text('Vitamin D ${food.vitaminD} IU'),
+          Divider(color: Theme.of(context).accentColor),
+        ],
+      ),
+      actions: [
+        FlatButton(
+          child: Row(
+            children: [
+              Text('Return'),
+              Icon(
+                Icons.arrow_back,
+                size: 34,
+                color: Colors.redAccent,
+              ),
+            ],
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        FlatButton(
+          child: Row(
+            children: [
+              Text('Add'),
+              Icon(
+                Icons.add,
+                size: 34,
+                color: Theme.of(context).primaryColor,
+              ),
+            ],
+          ),
+          onPressed: () {
+            _addFood(context, food);
+            Navigator.of(context).pushNamed('/FoodScreen');
+          },
+        ),
+      ],
+    ),
+  );
 }

@@ -1,44 +1,66 @@
 import 'package:hive/hive.dart';
 
-//@HiveType(typeId: 1)
-class Food {
-  //@HiveField(0)
-  int id;
-  //@HiveField(1)
-  String description;
-  //nutrients below
-  //@HiveField(2)
-  String carbohydrate;
+part 'food.g.dart';
 
+@HiveType(typeId: 2)
+class Food {
+  @HiveField(0)
+  DateTime dateTime;
+
+  @HiveField(1)
+  int id;
+
+  @HiveField(2)
+  String description;
+
+  //nutrients below
+  @HiveField(3)
+  String carbohydrate = '0';
+
+  @HiveField(4)
   String dataType;
 
-  String protein;
+  @HiveField(5)
+  String protein = '';
 
-  String totalLipid;
+  @HiveField(6)
+  String totalLipid = '0';
 
-  String energy;
+  @HiveField(7)
+  String energy = '0';
 
-  String vitaminA;
+  @HiveField(8)
+  String vitaminA = '0';
 
-  String vitaminD;
+  @HiveField(9)
+  String vitaminD = '0';
 
-  String calcium;
+  @HiveField(10)
+  String calcium = '0';
 
-  String iron;
+  @HiveField(11)
+  String iron = '0';
 
-  String vitaminC;
+  @HiveField(12)
+  String vitaminC = '0';
 
-  String sugarsTotal;
+  @HiveField(13)
+  String sugarsTotal = '0';
 
-  String fiber;
+  @HiveField(14)
+  String fiber = '0';
 
-  String sodium;
+  @HiveField(15)
+  String sodium = '0';
 
-  String cholesterol;
+  @HiveField(16)
+  String cholesterol = '0';
 
-  String fattyAcidsTrans;
+  @HiveField(17)
+  String fattyAcidsTrans = '0';
 
-  String fattyAcidsSat;
+  @HiveField(18)
+  String fattyAcidsSat = '0';
 
   Food({this.id, this.description, this.dataType, this.energy});
 

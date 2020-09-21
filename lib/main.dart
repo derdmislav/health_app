@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:health_app/models/food.dart';
+import 'package:health_app/models/food_data.dart';
 import 'package:health_app/models/medicine.dart';
 import 'package:health_app/models/medicine_data.dart';
 import 'package:health_app/models/step_count.dart';
 import 'package:health_app/models/step_count_data.dart';
 import 'package:health_app/screens/food_screen/add_food_screen.dart';
+import 'package:health_app/screens/food_screen/food_screen.dart';
 import 'package:health_app/screens/med_screen/add_medicine_screen.dart';
 import 'package:health_app/screens/overview/overview_screen.dart';
 import 'package:hive/hive.dart';
@@ -42,8 +45,9 @@ void main() async {
     },
   );
 
-  //Hive.registerAdapter(StepCountAdapter());
+  Hive.registerAdapter(StepCountAdapter());
   Hive.registerAdapter(MedicineAdapter());
+  Hive.registerAdapter(FoodAdapter());
 
   runApp(MyApp());
 }
@@ -58,8 +62,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MedicineData(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => FoodData()),
+        ChangeNotifierProvider(create: (context) => MedicineData()),
+        ChangeNotifierProvider(create: (context) => StepCountData()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'HealthApp',
@@ -92,6 +100,7 @@ class MyApp extends StatelessWidget {
               ),
           '/AddFoodScreen': (context) => AddFoodScreen(),
           '/AddMedicineScreen': (context) => AddMedicineScreen(),
+          '/FoodScreen': (context) => FoodScreen(),
         },
       ),
     );

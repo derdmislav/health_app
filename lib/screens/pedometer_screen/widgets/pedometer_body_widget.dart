@@ -103,7 +103,9 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                           Text(
-                            '250 kcal',
+                            snapshot.hasData && snapshot.data != null
+                                ? '${(snapshot.data.steps*0.04).toStringAsFixed(2)} kcal'
+                                : "?",
                             style: TextStyle(
                               color: Colors.white,
                             ),

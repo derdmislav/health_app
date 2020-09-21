@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'medicine.g.dart';
 
 @HiveType(typeId: 1)
-class Medicine {
+class Food {
   @HiveField(0)
   DateTime dateTime;
   @HiveField(1)
@@ -11,7 +11,7 @@ class Medicine {
   @HiveField(2)
   String dose;
 
-  Medicine({
+  Food({
     this.dateTime,
     this.medicine,
     this.dose,

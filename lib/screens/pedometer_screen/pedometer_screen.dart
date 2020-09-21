@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:health_app/constants.dart';
-import 'package:health_app/screens/pedometer_screen/widgets/add_goal_pedometer_widget.dart';
-
 import 'package:health_app/screens/pedometer_screen/widgets/pedometer_body_widget.dart';
 
 class PedometerScreen extends StatefulWidget {
@@ -41,21 +38,5 @@ AppBar _buildAppBar(BuildContext context) {
         color: Colors.black87,
       ),
     ),
-    actions: <Widget>[
-      IconButton(
-        padding: EdgeInsets.only(right: 30),
-        icon: Icon(
-          Icons.add,
-          color: Colors.black87,
-          size: 35,
-        ),
-        onPressed: () {
-          showDialog(
-            context: context,
-            child: AddGoalPedometerWidget(),
-          );
-        },
-      ),
-    ],
   );
 }

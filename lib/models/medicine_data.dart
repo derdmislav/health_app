@@ -6,25 +6,25 @@ import 'package:hive/hive.dart';
 class MedicineData extends ChangeNotifier {
   String _boxName = 'medicineBox';
 
-  List<Medicine> _medicineList = [];
+  List<Food> _medicineList = [];
 
-  Medicine _nextMedicine;
+  Food _nextMedicine;
 
   Future<void> getMedicineList() async {
-    var box = await Hive.openBox<Medicine>(_boxName);
+    var box = await Hive.openBox<Food>(_boxName);
 
     _medicineList = box.values.toList();
     notifyListeners();
   }
 
-  Medicine getMedicineAtIndex(index) {
+  Food getMedicineAtIndex(index) {
     return _medicineList[index];
   }
 
   int get medicineListLength => _medicineList.length;
 
-  void addMedicine(Medicine newMedicine) async {
-    var box = await Hive.openBox<Medicine>(_boxName);
+  void addMedicine(Food newMedicine) async {
+    var box = await Hive.openBox<Food>(_boxName);
 
     await box.add(newMedicine);
 
@@ -33,13 +33,13 @@ class MedicineData extends ChangeNotifier {
   }
 
   void setNextMedicine(key) async {
-    var box = await Hive.openBox<Medicine>(_boxName);
+    var box = await Hive.openBox<Food>(_boxName);
     _nextMedicine = box.get(key);
     notifyListeners();
   }
 
   /// Get Active Contact
-  Medicine getNextMedicine() {
+  Food getNextMedicine() {
     return _nextMedicine;
   }
 }

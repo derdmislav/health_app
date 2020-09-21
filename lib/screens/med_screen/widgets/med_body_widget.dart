@@ -81,18 +81,21 @@ class MedBodyWidget extends StatelessWidget {
                   ),
                 ),
 
-                //BACKEND medication HISTORY needed
-                Expanded(
-                  child: Container(
-                    width: size.width * 0.9,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return MedicineTile(tileIndex: index);
-                      },
-                      itemCount:
-                          Provider.of<MedicineData>(context).medicineListLength,
-                    ),
+                // med history
+                Container(
+                  height: size.height * 0.45,
+                  width: size.width * 0.9,
+                  alignment: Alignment.center,
+                  child: ListView.builder(
+                    
+                    reverse: true,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return MedicineTile(tileIndex: index);
+                    },
+                    itemCount:
+                        Provider.of<MedicineData>(context).medicineListLength,
                   ),
                 ),
               ],

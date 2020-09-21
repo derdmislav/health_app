@@ -6,17 +6,17 @@ part of 'medicine.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class MedicineAdapter extends TypeAdapter<Medicine> {
+class MedicineAdapter extends TypeAdapter<Food> {
   @override
   final int typeId = 1;
 
   @override
-  Medicine read(BinaryReader reader) {
+  Food read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Medicine(
+    return Food(
       dateTime: fields[0] as DateTime,
       medicine: fields[1] as String,
       dose: fields[2] as String,
@@ -24,7 +24,7 @@ class MedicineAdapter extends TypeAdapter<Medicine> {
   }
 
   @override
-  void write(BinaryWriter writer, Medicine obj) {
+  void write(BinaryWriter writer, Food obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)

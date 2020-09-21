@@ -72,65 +72,65 @@ class HealthAppApi {
       case "1079":
         {
           //print("Fiber, total dietary");
-          food.fiber=value.toString();
+          food.fiber = value.toString();
         }
         break;
 
       case "1087":
         {
           //print("Calcium, Ca");
-          food.calcium=value.toString();
+          food.calcium = value.toString();
         }
         break;
 
       case "1089":
         {
           //print("Iron, Fe");
-          food.iron=value.toString();
+          food.iron = value.toString();
         }
         break;
       case "1093":
         {
           //print("Sodium, Na");
-          food.sodium=value.toString();
+          food.sodium = value.toString();
         }
         break;
 
       case "1110":
         {
           //print("Vitamin D (D2 + D3), International Units");
-          food.vitaminD=value.toString();
+          food.vitaminD = value.toString();
         }
         break;
       case "1104":
         {
           //print("Vitamin A, IU");
-          food.vitaminA=value.toString();
+          food.vitaminA = value.toString();
         }
         break;
       case "1253":
         {
           //print("Cholesterol");
-          food.cholesterol=value.toString();
+          food.cholesterol = value.toString();
         }
         break;
 
       case "1257":
         {
           //print("Fatty acids, total trans");
-          food.fattyAcidsTrans=value.toString();
+          food.fattyAcidsTrans = value.toString();
         }
         break;
       case "1162":
         {
           //print("Vitamin C");
-          food.vitaminC=value.toString();
+          food.vitaminC = value.toString();
         }
         break;
       case "1258":
         {
           //print("Fatty acids, total saturated");
-          food.fattyAcidsSat=value.toString();
+          food.fattyAcidsSat = value.toString();
         }
         break;
 

@@ -4,6 +4,8 @@ import 'package:health_app/models/medicine.dart';
 import 'package:health_app/models/medicine_data.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:health_app/main.dart';
 
 class AddMedicineScreen extends StatefulWidget {
   @override
@@ -18,7 +20,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
   DateTime dateTimeMed;
 
   void _addMedicine(context) {
-    /// Validate the client name input
+    /// Validate the name and datetime input
     if (medicationName == null) {
       Fluttertoast.showToast(
         msg: 'You must include a name.',
@@ -36,7 +38,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
 
     /// Save medicine, dose and datetime
     Provider.of<MedicineData>(context, listen: false).addMedicine(
-      Medicine(
+      Food(
         medicine: medicationName,
         dose: (medicationDose != null) ? medicationDose : '',
         dateTime: dateTimeMed,
@@ -46,7 +48,25 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
       msg: 'Medicine added.',
       backgroundColor: Theme.of(context).accentColor,
     );
+    _scheduleNotification();
     Navigator.pop(context);
+  }
+
+  Future<void> _scheduleNotification() async {
+    var scheduledNotificationDateTime = dateTimeMed;
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your other channel id',
+        'your other channel name',
+        'your other channel description');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+        0,
+        '$medicationName - $medicationDose',
+        'You have scheduled notification for taking the $medicationName',
+        scheduledNotificationDateTime,
+        platformChannelSpecifics);
   }
 
   @override
@@ -77,6 +97,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
               ),
             ),
             onPressed: () {
+              /// Validate the client name input
               _addMedicine(context);
             },
           ),
