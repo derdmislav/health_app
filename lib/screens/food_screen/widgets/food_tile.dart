@@ -32,12 +32,8 @@ class _FoodTileState extends State<FoodTile> {
             color: Colors.black87,
             height: size.width * 0.08,
           ),
-          title: Text(
-            '${food.description}',
-          ),
-          subtitle: Text(
-            '$date',
-          ),
+          title: Text('${food.description}'),
+          subtitle: Text('$date'),
           trailing: Text('${food.energy} kcal'),
           onTap: () {
             _nutritionDialog(context, food);
@@ -76,10 +72,10 @@ void _nutritionDialog(BuildContext context, Food food) {
           Text('Sugars total: ${food.sugarsTotal} g'),
           Text('Fiber: ${food.fiber} g'),
           Divider(),
-          Text('Protein ${food.protein} g'),
+          Text('Protein: ${food.protein} g'),
           Divider(),
-          Text('Calcium ${food.calcium} mg'),
-          Text('Iron ${food.iron} mg'),
+          Text('Calcium: ${food.calcium} mg'),
+          Text('Iron: ${food.iron} mg'),
           Text('Vitamin A ${food.vitaminA} IU'),
           Text('Vitamin C ${food.vitaminC} mg'),
           Text('Vitamin D ${food.vitaminD} IU'),
