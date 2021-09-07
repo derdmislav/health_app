@@ -87,15 +87,13 @@ class MedBodyWidget extends StatelessWidget {
                   width: size.width * 0.9,
                   alignment: Alignment.center,
                   child: ListView.builder(
-                    
                     reverse: true,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return MedicineTile(tileIndex: index);
                     },
-                    itemCount:
-                        Provider.of<MedicineData>(context).medicineListLength,
+                    itemCount: Provider.of<MedicineData>(context).medicineListLength,
                   ),
                 ),
               ],

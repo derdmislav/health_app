@@ -8,7 +8,7 @@ class OverviewScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: buildAppBar(),
-      body: Body(),
+      body: OverviewBodyScreen(),
     );
   }
 
@@ -17,12 +17,6 @@ class OverviewScreen extends StatelessWidget {
       elevation: 0,
       title: Text('Overview'),
       centerTitle: false,
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.info),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 }

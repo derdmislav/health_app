@@ -25,8 +25,8 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_stepCountData == null)
-      _stepCountData = Provider.of<StepCountData>(context);
+
+    if (_stepCountData == null) _stepCountData = Provider.of<StepCountData>(context);
 
     if (!initialized) initPlatformState();
   }
@@ -41,13 +41,17 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
     if (!mounted) return;
   }
 
-  void updateSteps(StepCount data) {
+  void updateSteps(StepCount data) async {
     if (_stepCountData.stepLength == 0) {
       var stepCount = STEPCOUNT.StepCount(
         dateTime: DateTime.now(),
         steps: data.steps,
       );
       _stepCountData.addSteps(stepCount);
+    }
+    STEPCOUNT.StepCount temp = await _stepCountData.getLastStep();
+    if (temp.dateTime != null && (temp.dateTime.day != DateTime.now().day)) {
+      _stepCountData.addSteps(STEPCOUNT.StepCount(steps: data.steps, dateTime: DateTime.now()));
     }
   }
 
@@ -82,9 +86,6 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
                   child: StreamBuilder(
                     stream: _stepCountStream,
                     builder: (context, AsyncSnapshot<StepCount> snapshot) {
-                      print(snapshot.data);
-                      print('test');
-                      print(_stepCountData.stepLength);
                       if (snapshot.hasData) {
                         updateSteps(snapshot.data);
                       }
@@ -97,14 +98,12 @@ class _PedometerBodyWidgetState extends State<PedometerBodyWidget> {
                             height: size.width * 0.10,
                           ),
                           Text(
-                            snapshot.hasData && snapshot.data != null
-                                ? snapshot.data.steps.toString()
-                                : "?",
+                            snapshot.hasData && snapshot.data != null ? snapshot.data.steps.toString() : "?",
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                           Text(
                             snapshot.hasData && snapshot.data != null
-                                ? '${(snapshot.data.steps*0.04).toStringAsFixed(2)} kcal'
+                                ? '${(snapshot.data.steps * 0.04).toStringAsFixed(2)} kcal'
                                 : "?",
                             style: TextStyle(
                               color: Colors.white,

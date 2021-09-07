@@ -1,15 +1,15 @@
+import 'package:health_app/constants.dart';
 import 'package:health_app/models/food.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class HealthAppApi {
   Future<List<Food>> searchFood(String searchQuery) async {
-    final url =
-        "https://api.nal.usda.gov/fdc/v1/foods/search?query=$searchQuery&pageSize=20&api_key=DEMO_KEY";
+    final url = "https://api.nal.usda.gov/fdc/v1/foods/search?query=$searchQuery&pageSize=20&api_key=$apiKey";
 
     final response = await http.get(url);
 
-    List<Food> list = List<Food>();
+    List<Food> list = [];
     if (response.statusCode == 400 || response.statusCode == 500) {
       throw Exception("Unhandled error");
     } else {
@@ -17,9 +17,7 @@ class HealthAppApi {
       for (int i = 0; (i < (parsedJson["foods"] as List).length); i++) {
         list.add(Food.fromJson(parsedJson["foods"][i]));
         //
-        for (int j = 0;
-            (j < (parsedJson["foods"][i]["foodNutrients"] as List).length);
-            j++) {
+        for (int j = 0; (j < (parsedJson["foods"][i]["foodNutrients"] as List).length); j++) {
           callSwitch(
             parsedJson["foods"][i]["foodNutrients"][j]["nutrientId"],
             list[i],
@@ -33,7 +31,7 @@ class HealthAppApi {
     return list;
   }
 
-  void callSwitch(int nutrientId, Food food, double value) {
+  void callSwitch(int nutrientId, Food food, dynamic value) {
     switch (nutrientId.toString()) {
       case "1003":
         {

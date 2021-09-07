@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const String apiKey = "73XEFEruroGTs8PBY6cWUT4h9TSpmW12eCTD5LCE";
+
 const kDefaultShadow = BoxShadow(
   offset: Offset(2, 10),
   blurRadius: 27,
@@ -10,20 +12,3 @@ const kPrimaryColor = Color(0xFF035aa6);
 const kAccentColor = Color(0xFF5787FF);
 const kBackgroundColor = Color(0xFFf1f2f4);
 
-List<double> dailyValues = [
-  2000,
-  78,
-  20,
-  58,
-  300,
-  2300,
-  275,
-  50,
-  28,
-  50,
-  1300,
-  18,
-  900,
-  90,
-  20,
-];

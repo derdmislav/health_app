@@ -21,7 +21,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
 
   void _addMedicine(context) {
     /// Validate the name and datetime input
-    if (medicationName == null) {
+    if (medicationName == null || medicationName.isEmpty) {
       Fluttertoast.showToast(
         msg: 'You must include a name.',
         backgroundColor: Theme.of(context).accentColor,
@@ -53,20 +53,22 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
   }
 
   Future<void> _scheduleNotification() async {
+    String medicationStringBuilder = medicationDose == null ? medicationName : "$medicationName - $medicationDose";
     var scheduledNotificationDateTime = dateTimeMed;
+    
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your other channel id',
-        'your other channel name',
-        'your other channel description');
+        'your other channel id', 'your other channel name', 'your other channel description');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
     await flutterLocalNotificationsPlugin.schedule(
-        0,
-        '$medicationName - $medicationDose',
-        'You have scheduled notification for taking the $medicationName',
-        scheduledNotificationDateTime,
-        platformChannelSpecifics);
+      0,
+      medicationStringBuilder,
+      'You have scheduled notification for taking the $medicationName',
+      scheduledNotificationDateTime,
+      platformChannelSpecifics,
+    );
   }
 
   @override
@@ -88,7 +90,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
         // the App.build method, and use it to set our appbar title.
         title: Text('Medication'),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text(
               'Remind',
               style: TextStyle(
@@ -114,9 +116,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 child: TextField(
                   controller: controllerName,
                   autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: 'Medication name',
-                  ),
+                  decoration: InputDecoration(hintText: 'Medication name*', labelText: 'Mandatory*'),
                   onChanged: (value) {
                     medicationName = value;
                   },
@@ -127,9 +127,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 child: TextField(
                   controller: controllerDose,
                   autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: 'Dose',
-                  ),
+                  decoration: InputDecoration(hintText: 'Dose', suffixText: '(optional)'),
                   onChanged: (value) {
                     medicationDose = value;
                   },
@@ -140,22 +138,24 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 child: ButtonTheme(
                   minWidth: 150,
                   height: 50,
-                  child: RaisedButton(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                      side: BorderSide(
-                        color: Theme.of(context).primaryColorLight,
-                        width: 2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                        side: BorderSide(
+                          color: Theme.of(context).primaryColorLight,
+                          width: 2,
+                        ),
                       ),
+                      primary: Colors.white,
                     ),
-                    color: Colors.white,
                     onPressed: () {
                       DatePicker.showDateTimePicker(
                         context,
                         showTitleActions: true,
                         minTime: DateTime.now(),
-                        maxTime: null,
+                        maxTime: DateTime.now().add(Duration(days: 365)),
                         onConfirm: (date) {
                           setState(() {
                             dateTimeMed = date;
@@ -179,18 +179,21 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 height: 10,
               ),
               isNull()
-                  ? Text(
-                      'No date picked',
-                      style: TextStyle(fontSize: 18),
-                    )
-                  : Text(
-                      dateTimeMed.toString(),
-                      style: TextStyle(fontSize: 18),
-                    ),
+                  ? Text('No date picked', style: TextStyle(fontSize: 18))
+                  : Text(showDate(), style: TextStyle(fontSize: 20)),
+              if (!isNull()) Text(showTime(), style: TextStyle(fontSize: 20)),
             ],
           ),
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  String showDate() {
+    return ("${dateTimeMed.day}.${dateTimeMed.month}.${dateTimeMed.year}");
+  }
+
+  String showTime() {
+    return ("${dateTimeMed.hour}:${dateTimeMed.minute}");
   }
 }

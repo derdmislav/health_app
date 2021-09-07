@@ -16,8 +16,7 @@ import 'package:provider/provider.dart';
 
 import 'constants.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,11 +30,12 @@ void main() async {
     requestSoundPermission: true,
     requestBadgePermission: true,
     requestAlertPermission: true,
-    onDidReceiveLocalNotification:
-        (int id, String title, String body, String payload) async {},
+    onDidReceiveLocalNotification: (int id, String title, String body, String payload) async {},
   );
   var initializationSettings = InitializationSettings(
-      initializationSettingsAndroid, initializationSettingsIOS);
+    initializationSettingsAndroid,
+    initializationSettingsIOS,
+  );
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
     onSelectNotification: (String payload) async {
@@ -53,8 +53,7 @@ void main() async {
 }
 
 Future _initHive() async {
-  final appDocumentDirectory =
-      await path_provider.getApplicationDocumentsDirectory();
+  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
 }
 
@@ -101,6 +100,7 @@ class MyApp extends StatelessWidget {
           '/AddFoodScreen': (context) => AddFoodScreen(),
           '/AddMedicineScreen': (context) => AddMedicineScreen(),
           '/FoodScreen': (context) => FoodScreen(),
+          '/OverviewScreen': (context) => OverviewScreen(),
         },
       ),
     );

@@ -8,8 +8,6 @@ class MedicineData extends ChangeNotifier {
 
   List<Food> _medicineList = [];
 
-  Food _nextMedicine;
-
   Future<void> getMedicineList() async {
     var box = await Hive.openBox<Food>(_boxName);
 
@@ -32,14 +30,10 @@ class MedicineData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setNextMedicine(key) async {
+  Future<List<Food>> getNextMedicineInfoIfScheduled() async {
     var box = await Hive.openBox<Food>(_boxName);
-    _nextMedicine = box.get(key);
-    notifyListeners();
-  }
 
-  /// Get Active Contact
-  Food getNextMedicine() {
-    return _nextMedicine;
+    List<Food> medicineList = box.values.toList();
+    return medicineList;
   }
 }

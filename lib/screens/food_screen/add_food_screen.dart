@@ -12,7 +12,7 @@ class AddFoodScreen extends StatefulWidget {
 
 class _AddFoodScreenState extends State<AddFoodScreen> {
   String ingredient;
-  List<Food> foods = List<Food>();
+  List<Food> foods = [];
   bool isLoading = false;
   final TextEditingController controller = TextEditingController();
 
@@ -50,7 +50,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
         // the App.build method, and use it to set our appbar title.
         title: Text('Choose food'),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text(
               'Search',
               style: TextStyle(
@@ -109,11 +109,12 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                               _nutritionDialog(context, foods[index]);
                             },
                             leading: IconButton(
-                                icon: Icon(
-                                  Icons.playlist_add,
-                                  color: Theme.of(context).accentColor,
-                                ),
-                                onPressed: null),
+                              icon: Icon(
+                                Icons.playlist_add,
+                                color: Theme.of(context).accentColor,
+                              ),
+                              onPressed: null,
+                            ),
                             title: Text(foods[index].description.toString()),
                             subtitle: Text(foods[index].dataType),
                             trailing: Text('${foods[index].energy} kcal'),
@@ -153,25 +154,25 @@ void _nutritionDialog(BuildContext context, Food food) {
             color: Theme.of(context).accentColor,
             thickness: 1,
           ),
-          Text('Količina u 100 g'),
+          Text('Amount in 100 g'),
           Divider(),
-          Text('Kalorije(kcal) ${food.energy}'),
+          Text('Calories(kcal): ${food.energy}'),
           Divider(),
-          Text('Masti: ${food.totalLipid} g'),
-          Text('Zasicene ${food.fattyAcidsSat} g'),
-          Text('Nezasicene ${food.fattyAcidsTrans} g'),
+          Text('Total lipids: ${food.totalLipid} g'),
+          Text('Saturated fatty acids: ${food.fattyAcidsSat} g'),
+          Text('Unsaturated fatty acids ${food.fattyAcidsTrans} g'),
           Divider(),
-          Text('Kolesterol ${food.cholesterol} mg'),
-          Text('Natrij ${food.sodium} mg'),
+          Text('Cholesterol: ${food.cholesterol} mg'),
+          Text('Sodium ${food.sodium} mg'),
           Divider(),
-          Text('Ugljikohidrati ${food.carbohydrate} g'),
-          Text('Od toga šećeri: ${food.sugarsTotal} g'),
-          Text('Od toga dijetna vlakna: ${food.fiber} g'),
+          Text('Carbohydrate: ${food.carbohydrate} g'),
+          Text('Sugars total: ${food.sugarsTotal} g'),
+          Text('Fiber: ${food.fiber} g'),
           Divider(),
-          Text('Bjelančevine ${food.protein} g'),
+          Text('Protein: ${food.protein} g'),
           Divider(),
-          Text('Kalcij ${food.calcium} mg'),
-          Text('Željezo ${food.iron} mg'),
+          Text('Calcium: ${food.calcium} mg'),
+          Text('Iron: ${food.iron} mg'),
           Text('Vitamin A ${food.vitaminA} IU'),
           Text('Vitamin C ${food.vitaminC} mg'),
           Text('Vitamin D ${food.vitaminD} IU'),
@@ -179,7 +180,7 @@ void _nutritionDialog(BuildContext context, Food food) {
         ],
       ),
       actions: [
-        FlatButton(
+        TextButton(
           child: Row(
             children: [
               Text('Return'),
@@ -192,7 +193,7 @@ void _nutritionDialog(BuildContext context, Food food) {
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        FlatButton(
+        TextButton(
           child: Row(
             children: [
               Text('Add'),

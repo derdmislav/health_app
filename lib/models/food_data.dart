@@ -8,11 +8,11 @@ class FoodData extends ChangeNotifier {
 
   List<Food> _foodList = [];
 
-  Future<void> getFoodList() async {
+  Future<List<Food>> getFoodList() async {
     var box = await Hive.openBox<Food>(_boxName);
 
     _foodList = box.values.toList();
-    notifyListeners();
+    return _foodList;
   }
 
   Food getFoodAtIndex(index) {

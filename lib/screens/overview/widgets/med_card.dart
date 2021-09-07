@@ -66,7 +66,6 @@ class MedCard extends StatelessWidget {
                       horizontal: 10,
                       vertical: 5,
                     ),
-                    //PUB DEV PEDOMETER
                     child: Text(
                       'Get notified to take prescription',
                       style: TextStyle(

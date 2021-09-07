@@ -42,9 +42,7 @@ class FoodCard extends StatelessWidget {
             top: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               height: 160,
               width: 200,
               child: SvgPicture.asset('assets/svgs/Food.svg'),
@@ -66,7 +64,6 @@ class FoodCard extends StatelessWidget {
                       horizontal: 10,
                       vertical: 5,
                     ),
-                    //PUB DEV PEDOMETER
                     child: Text(
                       'Track your daily food intake',
                       style: TextStyle(

@@ -34,9 +34,7 @@ AppBar _buildAppBar(BuildContext context) {
     ),
     title: Text(
       'Pedometer screen',
-      style: TextStyle(
-        color: Colors.black87,
-      ),
+      style: TextStyle(color: Colors.black87),
     ),
   );
 }

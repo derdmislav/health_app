@@ -33,6 +33,7 @@ AppBar _buildAppBar(BuildContext context) {
       ),
       onPressed: () {
         Navigator.pop(context);
+        Navigator.pushNamed(context, '/OverviewScreen');
       },
     ),
     title: Text(

@@ -32,26 +32,14 @@ class StepCountData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteStepCount(key) async {
+  Future<StepCount> getLastStep() async {
     var box = await Hive.openBox<StepCount>(_boxName);
-
-    await box.delete(key);
 
     _stepCounts = box.values.toList();
 
-    notifyListeners();
-  }
-
-  void editStepCount({StepCount stepCount, int stepCountKey}) async {
-    var box = await Hive.openBox<StepCount>(_boxName);
-
-    await box.put(stepCountKey, stepCount);
-
-    _stepCounts = box.values.toList();
-
-    _activeSteps = box.get(stepCountKey);
-
-    notifyListeners();
+    if(_stepCounts!=null && _stepCounts.isNotEmpty)
+    return _stepCounts.last;
+    return StepCount(steps: 0,dateTime: null);
   }
 
   void setActiveContact(key) async {
@@ -63,5 +51,17 @@ class StepCountData extends ChangeNotifier {
   /// Get Active Contact
   StepCount getActiveContact() {
     return _activeSteps;
+  }
+
+  Future<String> getDailySteps() async {
+    var box = await Hive.openBox<StepCount>(_boxName);
+    _stepCounts = box.values.toList();
+
+    if (_stepCounts == null) return 'Something\'s wrong';
+    int stepCountsLength= _stepCounts.length;
+    if (_stepCounts.length < 2) return _stepCounts.first.steps.toString();
+    if (_stepCounts.length == 2) return (_stepCounts.last.steps - _stepCounts[stepCountsLength-2].steps).toString();
+
+    return _stepCounts.last.steps.toString();
   }
 }

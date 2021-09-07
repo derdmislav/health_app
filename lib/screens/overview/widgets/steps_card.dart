@@ -3,11 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:health_app/constants.dart';
+import 'package:health_app/models/step_count_data.dart';
+import 'package:provider/provider.dart';
 
-class StepsCard extends StatelessWidget {
+class StepsCard extends StatefulWidget {
   const StepsCard({
     Key key,
   }) : super(key: key);
+
+  @override
+  _StepsCardState createState() => _StepsCardState();
+}
+
+class _StepsCardState extends State<StepsCard> {
+  String _dailySteps;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +76,7 @@ class StepsCard extends StatelessWidget {
                       vertical: 5,
                     ),
                     child: Text(
-                      '5000/6000 steps completed',
+                      'Track your steps',
                       style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontSize: 18,
@@ -99,5 +108,11 @@ class StepsCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<String> showDailySteps() async {
+    _dailySteps = await Provider.of<StepCountData>(context, listen: false).getDailySteps();
+
+    return _dailySteps;
   }
 }

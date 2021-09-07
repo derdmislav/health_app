@@ -31,7 +31,7 @@ class MedicineTile extends StatelessWidget {
             '${medicine.medicine} - ${medicine.dose}',
           ),
           subtitle: Text(
-            '${dayFormatter.format(medicine.dateTime)} ${dateFormatter.format(medicine.dateTime)}',
+            '${medicine.dateTime.hour}:${medicine.dateTime.minute}  ${dayFormatter.format(medicine.dateTime)} ${dateFormatter.format(medicine.dateTime)}',
           ),
           trailing: medicine.dateTime.isBefore(
             DateTime.now(),
